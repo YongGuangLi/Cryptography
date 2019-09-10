@@ -7,7 +7,7 @@
 #include <QString>
 #include "rsacryptography.h"
 #include "sm2cryptography.h"
-#include "x509parse.h"
+#include "sm2SignUtil.h"
 
 namespace Ui {
 class Dialog;

@@ -16,8 +16,6 @@
 
 #include <openssl/pkcs12.h>
 
-#include <e_os.h>
-
 using namespace std;
 
 class X509Parse

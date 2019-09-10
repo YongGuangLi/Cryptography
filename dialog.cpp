@@ -51,7 +51,6 @@ Dialog::Dialog(QWidget *parent) :
     qDebug()<<QByteArray((const char *)sig, slen).toHex();
     unsigned char *sm2SignValua = X509Parse::stripAdditionalVaule(sig);
 
-
     int length = 0;
     unsigned char *sig1 =  X509Parse::addAdditionalValue(sm2SignValua, length);
     qDebug()<<QByteArray((const char *)sig1, length).toHex();

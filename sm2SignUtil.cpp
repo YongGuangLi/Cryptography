@@ -1,3 +1,11 @@
+
+/*
+ * sm2SignUtil.cpp
+ *
+ *  Created on: Sep 10, 2019
+ *      Author: LiyG
+ */
+
 #include "sm2SignUtil.h"
 
 static time_t ASN1_TIME_get(ASN1_TIME* time)
@@ -87,11 +95,11 @@ X509 *X509Parse::read_X509(string x509CertFile)
 {
     X509 *cert = NULL;
 
-    BIO *f = BIO_new_file(x509CertFile.c_str(), "r");
-    if (f != NULL)
+    BIO *bio = BIO_new_file(x509CertFile.c_str(), "r");
+    if (bio != NULL)
     {
-        cert = PEM_read_bio_X509(f, NULL, 0, NULL);    // 获得证书序列号函数
-        BIO_free(f);
+        cert = PEM_read_bio_X509(bio, NULL, 0, NULL);    // 获得证书序列号函数
+        BIO_free(bio);
     }
 
     return cert;
@@ -114,21 +122,29 @@ void X509Parse::X509_free_PKEY(EVP_PKEY *key)
 
 EVP_PKEY *X509Parse::read_P12(string p12CertFile, string pass)
 {
-    FILE *fp;
-    if ((fp = fopen(p12CertFile.c_str(), "rb")) == NULL)
+    PKCS12 *p12 = NULL;
+    BIO *bio = BIO_new_file(p12CertFile.c_str(), "r");
+    if (bio != NULL)
     {
-        fprintf(stderr, "Error opening file %s\n", p12CertFile.c_str());
-        exit(1);
+        p12 = d2i_PKCS12_bio(bio, NULL);
+        BIO_free(bio);
     }
 
-    PKCS12 *p12 = d2i_PKCS12_fp(fp, NULL);
-    fclose(fp);
-    if (!p12)
-    {
-        fprintf(stderr, "Error reading PKCS#12 file\n");
-        ERR_print_errors_fp(stderr);
-        exit(1);
-    }
+//    FILE *fp;
+//    if ((fp = fopen(p12CertFile.c_str(), "rb")) == NULL)
+//    {
+//        fprintf(stderr, "Error opening file %s\n", p12CertFile.c_str());
+//        exit(1);
+//    }
+
+//    PKCS12 *p12 = d2i_PKCS12_fp(fp, NULL);
+//    fclose(fp);
+//    if (!p12)
+//    {
+//        fprintf(stderr, "Error reading PKCS#12 file\n");
+//        ERR_print_errors_fp(stderr);
+//        exit(1);
+//    }
 
     STACK_OF(X509) *ca = NULL;
     EVP_PKEY *pkey;
